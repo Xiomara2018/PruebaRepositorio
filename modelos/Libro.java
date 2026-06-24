@@ -1,14 +1,14 @@
 package modelos;
 
-public class Libro {
-    private String codigo;
+public class Libro implements Comparable<Libro> {
+    private int codigo;
     private String titulo;
     private String autor;
     private String categoria;
-    private String anio;
-    private String estado;
+    private int anio;
+    private EstadoLibro estado;
 
-    public Libro(String codigo, String titulo, String autor, String categoria, String anio, String estado) {
+    public Libro(int codigo, String titulo, String autor, String categoria, int anio, EstadoLibro estado) {
         this.codigo = codigo;
         this.titulo = titulo;
         this.autor = autor;
@@ -17,21 +17,37 @@ public class Libro {
         this.estado = estado;
     }
 
-    public void setcodigo(String code){this.codigo = code;}
-    public String getcode(){return this.codigo;}
+    public int getCodigo() { 
+    	return codigo; }
+    public String getTitulo() { 
+    	return titulo; }
+    public String getAutor() { 
+    	return autor; }
+    public String getCategoria() { 
+    	return categoria; }
+    public int getAnio() { 
+    	return anio; }
+    public EstadoLibro getEstado() { 
+    	return estado; }
 
-    public void settitulo(String titulo){this.titulo = titulo;}
-    public String getitulo(){return this.titulo;}
+    public void setTitulo(String titulo) { 
+    	this.titulo = titulo; }
+    public void setAutor(String autor) { 
+    	this.autor = autor; }
+    public void setCategoria(String categoria) { 
+    	this.categoria = categoria; }
+    public void setAnio(int anio) { 
+    	this.anio = anio; }
+    public void setEstado(EstadoLibro estado) { 
+    	this.estado = estado; }
 
-    public void setautor(String autor){this.autor = autor;}
-    public String getautor(){return this.autor;}
+    @Override
+    public int compareTo(Libro otro) {
+        return Integer.compare(this.codigo, otro.codigo);
+    }
 
-    public void setcatgia(String categoria){this.categoria = categoria;}
-    public String getcatgia(){return this.categoria;}
-
-    public void setanio(String anio){this.anio = anio;}
-    public String getanio(){return this.anio;}
-    
-
+    @Override
+    public String toString() {
+        return ....;
+    }
 }
-
