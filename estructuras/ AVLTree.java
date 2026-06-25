@@ -94,3 +94,4 @@ public class AVLTree<E extends Comparable<E>> {
         // si está balanceado, se retorna el nodo sin cambios
         return node;
     }
+}
