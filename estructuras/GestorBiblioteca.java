@@ -8,6 +8,7 @@ import modelos.Libro;
 import modelos.Solicitud;
 import modelos.EstadoLibro;
 
+
 public class GestorBiblioteca {
 
     private Cola<Solicitud> colaSolicitudes;
@@ -73,5 +74,25 @@ public class GestorBiblioteca {
         } catch (ItemNotfound e) {
             System.out.println("Error: No se encontró ningún libro con el código " + codigoLibro);
         }
+    }
+
+    public void mostrarReporteBasico() {
+        System.out.println("\n=== REPORTE BÁSICO DE BIBLIOTECA ===");
+        System.out.println("Solicitudes pendientes en cola: " + colaSolicitudes.size());
+
+        List<Libro> todosLosLibros = arbolLibros.obtenerListaLibros(); 
+        int totales = 0, disponibles = 0, prestados = 0;
+        if (todosLosLibros != null) {
+            totales = todosLosLibros.size();
+            for (Libro libro : todosLosLibros) {
+                if (libro.getEstado() == EstadoLibro.DISPONIBLE) disponibles++;
+                else prestados++; 
+            }
+        }
+        System.out.println("Total de libros registrados: " + totales);
+        System.out.println("Libros disponibles: " + disponibles);
+        System.out.println("Libros prestados: " + prestados);
+        */
+        System.out.println("====================================\n");
     }
 }
