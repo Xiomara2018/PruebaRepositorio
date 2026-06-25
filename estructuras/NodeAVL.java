@@ -1,6 +1,6 @@
 package estructuras;
 
-public class NodeAVL<T> {
+public class NodeAVL<E> {
     T data;                 // dato almacenado
     NodeAVL<T> left;       // hijo izquierdo
     NodeAVL<T> right;      // hijo derecho
