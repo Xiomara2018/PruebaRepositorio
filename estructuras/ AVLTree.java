@@ -94,4 +94,35 @@ public class AVLTree<E extends Comparable<E>> {
         // si está balanceado, se retorna el nodo sin cambios
         return node;
     }
-}
+}     return searchRec(root, data);
+    }
+
+    // Método recursivo para buscar un dato
+    private E searchRec(NodeAVL<E> node, E data) throws ItemNotfound {
+        // Si llegó a null significa que no existe
+        if (node == null) {
+            throw new ItemNotfound("Elemento no encontrado.");
+        }
+        // Comparar el dato buscado con el dato del nodo actual
+        int cmp = data.compareTo(node.data);
+        // Si son iguales se encontró el dato
+        if (cmp == 0) {
+            return node.data;
+        }
+        // Si es menor buscar por la izquierda
+        if (cmp < 0) {
+            return searchRec(node.left, data);
+        }
+        // Si es mayor buscar por la derecha
+        return searchRec(node.right, data);
+    }
+    // VERIFICAR SI EL ÁRBOL ESTÁ VACÍO
+    public boolean isEmpty() {
+        return root == null;
+    }
+    // RECORRIDO INORDEN
+    // Muestra los elementos ordenados
+    public void inOrder() {
+        inOrderRec(root);
+        System.out.println();
+    }
