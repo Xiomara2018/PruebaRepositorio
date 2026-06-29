@@ -9,31 +9,48 @@ public class Libro implements Comparable<Libro> {
     private String autor;
     private String categoria;
     private int anio;
-    private EstadoLibro estado;
+    private String estado;
 
-    public Libro(int codigo, String titulo, String autor, String categoria, int anio, EstadoLibro estado)
+    public Libro(int codigo, String titulo, String autor, String categoria, int anio, String estado)
             throws ExceptionIsEmpty {
 
         if (titulo == null) {
             throw new ExceptionIsEmpty("El titulo no puede estar vacio");
         }
-
+        if (titulo.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El titulo no puede estar vacio");
+        }
         if (autor == null) {
             throw new ExceptionIsEmpty("El autor no puede estar vacio");
         }
-
+        if (autor.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El autor no puede estar vacio");
+        }
         if (categoria == null) {
             throw new ExceptionIsEmpty("La categoria no puede estar vacia");
         }
-        
-        
+        if (categoria.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("La categoria no puede estar vacia");
+        }
+        if (estado == null) {
+            throw new ExceptionIsEmpty("El estado no puede estar vacio");
+        }
+        if (estado.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El estado no puede estar vacio");
+        }
+        // Usamos el metodo esValido de EstadoLibro en vez de comparar
+        // a mano. Asi la regla de "que estados existen" vive en un
+        // solo lugar (EstadoLibro) y no se repite en cada clase.
+        if (!EstadoLibro.esValido(estado)) {
+            throw new ExceptionIsEmpty("El estado debe ser 'Disponible' o 'Prestado'");
+        }
+
         this.codigo = codigo;
         this.titulo = titulo;
         this.autor = autor;
         this.categoria = categoria;
         this.anio = anio;
         this.estado = estado;
-
     }
 
     public int getCodigo() {
@@ -56,7 +73,7 @@ public class Libro implements Comparable<Libro> {
         return anio;
     }
 
-    public EstadoLibro getEstado() {
+    public String getEstado() {
         return estado;
     }
 
@@ -76,8 +93,11 @@ public class Libro implements Comparable<Libro> {
         this.anio = anio;
     }
 
-    public void setEstado(EstadoLibro estado) {
-        this.estado = estado;
+    public void setEstado(String estado) {
+        // no quede en un valor invalido despues de crear el libro.
+        if (EstadoLibro.esValido(estado)) {
+            this.estado = estado;
+        }
     }
 
     @Override
