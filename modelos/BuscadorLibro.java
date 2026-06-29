@@ -1,8 +1,8 @@
-package ...;
+package ....;
 
 import java.util.ArrayList;
 import java.util.List;
-import modelos.libros;
+import modelos.Libro;
 
 public class BuscadorLibros {
 
@@ -12,9 +12,11 @@ public class BuscadorLibros {
         if (listaLibros == null) {
             return resultado;
         }
+
         if (tituloBuscado == null) {
             return resultado;
         }
+
         if (tituloBuscado.trim().isEmpty()) {
             return resultado;
         }
@@ -29,3 +31,33 @@ public class BuscadorLibros {
 
         return resultado;
     }
+
+    public List<Libro> buscarPorCategoria(List<Libro> listaLibros, String categoriaBuscada) {
+        List<Libro> resultado = new ArrayList<>();
+
+        if (listaLibros == null) {
+            return resultado;
+        }
+
+        if (categoriaBuscada == null) {
+            return resultado;
+        }
+
+        if (categoriaBuscada.trim().isEmpty()) {
+            return resultado;
+        }
+
+        String textoBuscado = categoriaBuscada.trim().toLowerCase();
+
+        for (int i = 0; i < listaLibros.size(); i++) {
+            Libro libroActual = listaLibros.get(i);
+            String categoriaActual = libroActual.getCategoria().toLowerCase();
+
+            if (categoriaActual.equals(textoBuscado)) {
+                resultado.add(libroActual);
+            }
+        }
+
+        return resultado;
+    }
+}
