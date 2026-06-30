@@ -15,16 +15,15 @@ import modelos.Solicitud;
 
 public class GestorBiblioteca {
 
-    private Cola<Solicitud> colaSolicitudes;
-    private AVLTree<Libro> arbolLibros;
-    private BuscadorLibros buscador;
+    private final Cola<Solicitud> colaSolicitudes;
+    private final AVLTree<Libro> arbolLibros;
+    private final BuscadorLibros buscador;
 
     public GestorBiblioteca() {
         this.colaSolicitudes = new Cola<>();
         this.arbolLibros = new AVLTree<>();
         this.buscador = new BuscadorLibros();
     }
-
     public Cola<Solicitud> getColaSolicitudes() {
         return colaSolicitudes;
     }
