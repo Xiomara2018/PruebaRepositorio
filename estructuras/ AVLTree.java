@@ -1,133 +1,225 @@
 package estructuras;
 
 public class AVLTree<E extends Comparable<E>> {
+
     private NodeAVL<E> root;
+
+    // constructor
     public AVLTree() {
         this.root = null;
     }
     // ALTURA DEL NODO
     private int height(NodeAVL<E> node) {
-        return (node == null) ? 0 : node.height;
+        if (node == null) return 0;
+        return node.height;
     }
     // FACTOR DE BALANCE
     // izquierda - derecha
-    // sirve para detectar desbalance en el árbol AVL
     private int getBalance(NodeAVL<E> node) {
-        return (node == null) ? 0 : height(node.left) - height(node.right);
+        if (node == null) return 0;
+        return height(node.left) - height(node.right);
     }
     // ROTACIÓN DERECHA
     private NodeAVL<E> rightRotate(NodeAVL<E> y) {
-        NodeAVL<E> x = y.left;      // hijo izquierdo
-        NodeAVL<E> T2 = x.right;    // subárbol intermedio
-        // rotación: x sube, y baja a la derecha
+
+        NodeAVL<E> x = y.left;
+        NodeAVL<E> T2 = x.right;
+
+        // rotación
         x.right = y;
         y.left = T2;
-        // actualiza altura de y después del cambio
-        y.height = Math.max(height(y.left), height(y.right)) + 1;
 
-        // actualizar altura de x (nueva raíz del subárbol)
+        // actualizar alturas
+        y.height = Math.max(height(y.left), height(y.right)) + 1;
         x.height = Math.max(height(x.left), height(x.right)) + 1;
 
-        return x; // nueva raíz del subárbol
+        return x;
     }
-
     // ROTACIÓN IZQUIERDA
     private NodeAVL<E> leftRotate(NodeAVL<E> x) {
 
-        NodeAVL<E> y = x.right;     // hijo derecho
-        NodeAVL<E> T2 = y.left;     // subárbol intermedio
+        NodeAVL<E> y = x.right;
+        NodeAVL<E> T2 = y.left;
 
-        // rotación: y sube, x baja a la izquierda
+        // rotación
         y.left = x;
         x.right = T2;
 
-        // actualizar alturas después del cambio
+        // actualizar alturas
         x.height = Math.max(height(x.left), height(x.right)) + 1;
         y.height = Math.max(height(y.left), height(y.right)) + 1;
 
-        return y; // nueva raíz del subárbol
+        return y;
     }
-
     // INSERTAR
     public void insert(E data) throws ItemDuplicated {
         root = insertRec(root, data);
     }
 
-    // INSERCIÓN RECURSIVA
     private NodeAVL<E> insertRec(NodeAVL<E> node, E data) throws ItemDuplicated {
-        // si el nodo está vacío se inserta el nuevo libro
+
         if (node == null) {
             return new NodeAVL<>(data);
         }
-        // comparar el dato con el nodo actual
+
         int cmp = data.compareTo(node.data);
 
-        // si son iguales no se permite duplicados
         if (cmp == 0) {
-            throw new ItemDuplicated("Elemento duplicado: " + data);
+            throw new ItemDuplicated("Elemento duplicado");
         }
 
-        // si es menor se va a ir a la izquierda
         if (cmp < 0) {
             node.left = insertRec(node.left, data);
-        }
-
-        // si es mayor se va a ir a la derecha
-        else {
+        } else {
             node.right = insertRec(node.right, data);
         }
 
-        // actualizar altura del nodo actual después de insertar
+        // actualizar altura
         node.height = 1 + Math.max(height(node.left), height(node.right));
 
-        // calcular balance del nodo
+        // balance
         int balance = getBalance(node);
 
-        // CASO LL (izquierda-izquierda)
+        // LL
         if (balance > 1 && data.compareTo(node.left.data) < 0)
             return rightRotate(node);
 
-        // CASO RR (derecha-derecha)
+        // RR
         if (balance < -1 && data.compareTo(node.right.data) > 0)
             return leftRotate(node);
 
-        // CASO LR (izquierda-derecha)
+        // LR
         if (balance > 1 && data.compareTo(node.left.data) > 0) {
             node.left = leftRotate(node.left);
             return rightRotate(node);
         }
-        // CASO RL (derecha-izquierda)
+
+        // RL
         if (balance < -1 && data.compareTo(node.right.data) < 0) {
             node.right = rightRotate(node.right);
             return leftRotate(node);
         }
-        // si está balanceado, se retorna el nodo sin cambios
+
         return node;
     }
-    // BUSCAR UN ELEMENTO
+    // BUSCAR
     public E search(E data) throws ItemNotfound {
         return searchRec(root, data);
     }
-    // Método recursivo para buscar un dato
+
     private E searchRec(NodeAVL<E> node, E data) throws ItemNotfound {
-        // Si llegó a null significa que no existe
+
         if (node == null) {
-            throw new ItemNotfound("Elemento no encontrado.");
+            throw new ItemNotfound("No encontrado");
         }
-        // Comparar el dato buscado con el dato del nodo actual
+
         int cmp = data.compareTo(node.data);
-        // Si son iguales se encontró el dato
-        if (cmp == 0) {
-            return node.data;
-        }
-        // Si es menor buscar por la izquierda
-        if (cmp < 0) {
+
+        if (cmp == 0) return node.data;
+
+        if (cmp < 0)
             return searchRec(node.left, data);
-        } 
-        // Si es mayor buscar por la derecha
+
         return searchRec(node.right, data);
     }
-    // VERIFICAR SI EL ÁRBOL ESTÁ VACÍO
+    // ENCONTRAR MENOR 
+    private NodeAVL<E> minValueNode(NodeAVL<E> node) {
+        NodeAVL<E> current = node;
+
+        while (current.left != null) {
+            current = current.left;
+        }
+
+        return current;
+    }
+    // ELIMINAR
+    public void delete(E data) {
+        root = deleteRec(root, data);
+    }
+
+    private NodeAVL<E> deleteRec(NodeAVL<E> node, E data) {
+
+        if (node == null) return null;
+
+        int cmp = data.compareTo(node.data);
+
+        if (cmp < 0) {
+            node.left = deleteRec(node.left, data);
+        } else if (cmp > 0) {
+            node.right = deleteRec(node.right, data);
+        } else {
+
+            // caso 1: un hijo o ninguno
+            if (node.left == null || node.right == null) {
+                NodeAVL<E> temp = (node.left != null) ? node.left : node.right;
+
+                if (temp == null) {
+                    node = null;
+                } else {
+                    node = temp;
+                }
+            } else {
+
+                // caso 2: dos hijos
+                NodeAVL<E> temp = minValueNode(node.right);
+                node.data = temp.data;
+                node.right = deleteRec(node.right, temp.data);
+            }
+        }
+
+        if (node == null) return null;
+
+        // actualizar altura
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+
+        // balance
+        int balance = getBalance(node);
+
+        // LL
+        if (balance > 1 && getBalance(node.left) >= 0)
+            return rightRotate(node);
+
+        // LR
+        if (balance > 1 && getBalance(node.left) < 0) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        // RR
+        if (balance < -1 && getBalance(node.right) <= 0)
+            return leftRotate(node);
+
+        // RL
+        if (balance < -1 && getBalance(node.right) > 0) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
+        }
+
+        return node;
+    }
+    // INORDEN
+    public void inOrder() {
+        inOrderRec(root);
+    }
+
+    private void inOrderRec(NodeAVL<E> node) {
+        if (node != null) {
+            inOrderRec(node.left);
+            System.out.println(node.data);
+            inOrderRec(node.right);
+        }
+    }
+    // CONTAR NODOS
+    public int count() {
+        return countRec(root);
+    }
+
+    private int countRec(NodeAVL<E> node) {
+        if (node == null) return 0;
+        return 1 + countRec(node.left) + countRec(node.right);
+    }
+    // VERIFICAR VACÍO
     public boolean isEmpty() {
         return root == null;
     }
+}
