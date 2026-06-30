@@ -16,9 +16,13 @@ public DialogoBuscarLibro(JFrame ventanaPadre, GestorBiblioteca gestor) {
         setLayout(new BorderLayout(10, 10));
     JPanel panelBusqueda = new JPanel(new FlowLayout());
     panelBusqueda.add(new JLabel("Ingrese el Código del Libro:"));
-    txtCodigoBuscar = new JTextField(10); // Caja de texto de 10 columnas de ancho
+    txtCodigoBuscar = new JTextField(10); 
     panelBusqueda.add(txtCodigoBuscar);   
     JButton btnBuscar = new JButton("Buscar");
     panelBusqueda.add(btnBuscar);
     add(panelBusqueda, BorderLayout.NORTH);
+    xtResultado = new JTextArea();
+        txtResultado.setEditable(false); 
+        txtResultado.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        txtResultado.setBorder(BorderFactory.createTitledBorder("Resultado de la Búsqueda"));
 }
