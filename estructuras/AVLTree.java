@@ -1,5 +1,8 @@
 package estructuras;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AVLTree<E extends Comparable<E>> {
 
     private NodeAVL<E> root;
@@ -209,6 +212,22 @@ public class AVLTree<E extends Comparable<E>> {
             inOrderRec(node.right);
         }
     }
+
+    public List<E> obtenerListaLibros() {
+        List<E> lista = new ArrayList<>();
+        obtenerListaRec(root, lista);
+        return lista;
+    }
+
+    // Método recursivo auxiliar para llenar la lista en In-Orden
+    private void obtenerListaRec(NodeAVL<E> node, List<E> lista) {
+        if (node != null) {
+            obtenerListaRec(node.left, lista);   // Recorre el subárbol izquierdo
+            lista.add(node.data);                // Agrega el dato (Libro) a la lista
+            obtenerListaRec(node.right, lista);  // Recorre el subárbol derecho
+        }
+    }
+    
     // CONTAR NODOS
     public int count() {
         return countRec(root);
