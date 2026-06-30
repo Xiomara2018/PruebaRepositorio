@@ -8,15 +8,24 @@ import java.util.List;
 import modelos.EstadoLibro;
 import modelos.Libro;
 import modelos.Solicitud;
+<<<<<<< HEAD
+import modelos.EstadoLibro;
+import modelos.BuscadorLibros;
+import java.util.ArrayList;
+import java.util.List;
+=======
+>>>>>>> 3fc000f046c042a2c260380ce65915b5f4d0aadf
 
 public class GestorBiblioteca {
 
     private Cola<Solicitud> colaSolicitudes;
     private AVLTree<Libro> arbolLibros;
+    private BuscradorLibros buscador;
 
     public GestorBiblioteca() {
         this.colaSolicitudes = new Cola<>();
         this.arbolLibros = new AVLTree<>();
+        this.buscador = new BuscadorLibros();
     }
 
     public Cola<Solicitud> getColaSolicitudes() {
