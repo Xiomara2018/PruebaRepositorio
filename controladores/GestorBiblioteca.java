@@ -8,13 +8,10 @@ import java.util.List;
 import modelos.EstadoLibro;
 import modelos.Libro;
 import modelos.Solicitud;
-<<<<<<< HEAD
 import modelos.EstadoLibro;
 import modelos.BuscadorLibros;
 import java.util.ArrayList;
 import java.util.List;
-=======
->>>>>>> 3fc000f046c042a2c260380ce65915b5f4d0aadf
 
 public class GestorBiblioteca {
 
@@ -35,6 +32,43 @@ public class GestorBiblioteca {
     public AVLTree<Libro> getArbolLibros() {
         return arbolLibros;
     }
+    public void registrarLibro (Int codigo, String titulo, String autor, String categoria, int anio, String estado)
+        throws ExceptionIsEmpty, ItemDuplicated {
+         Libro libro = new Libro(codigo, titulo, autor, categoria, anio, estado);
+        arbolLibros.insert(libro);
+    }    
+    public List<Libro> mostrarTodosLosLibros() {
+        return arbolLibros.obtenerListaLibros();
+    }
+     public Libro buscarPorCodigo(int codigo) throws ItemNotfound, ExceptionIsEmpty {
+        Libro libroTemporal = new Libro(codigo, "Temp", "Temp", "Temp", 0, EstadoLibro.DISPONIBLE);
+        return arbolLibros.search(libroTemporal);
+    }
+    public void modificarLibro(int codigo, String nuevoTitulo, String nuevoAutor, String nuevaCategoria, int nuevoAnio)
+            throws ItemNotfound, ExceptionIsEmpty {
+        Libro libro = buscarPorCodigo(codigo);
+        if (nuevoTitulo != null && !nuevoTitulo.trim().isEmpty()) {
+            libro.setTitulo(nuevoTitulo);
+        }
+        if (nuevoAutor != null && !nuevoAutor.trim().isEmpty()) {
+            libro.setAutor(nuevoAutor);
+        }
+        if (nuevaCategoria != null && !nuevaCategoria.trim().isEmpty()) {
+            libro.setCategoria(nuevaCategoria);
+        }
+        if (nuevoAnio > 0) {
+            libro.setAnio(nuevoAnio);
+        }
+        public void eliminarLibro(int codigo) throws ItemNotfound, ExceptionIsEmpty {
+            Libro libro = buscarPorCodigo(codigo);
+            arbolLibros.delete(libro);
+    }
+    
+    }
+
+
+
+
 
     public String procesarPrestamo() {
         if (colaSolicitudes.IsEmpty()) {
