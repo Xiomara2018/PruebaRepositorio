@@ -12,7 +12,6 @@ import modelos.EstadoLibro;
 import modelos.Libro;
 import modelos.Solicitud;
 
-
 public class GestorBiblioteca {
 
     private final Cola<Solicitud> colaSolicitudes;
@@ -24,6 +23,7 @@ public class GestorBiblioteca {
         this.arbolLibros = new AVLTree<>();
         this.buscador = new BuscadorLibros();
     }
+
     public Cola<Solicitud> getColaSolicitudes() {
         return colaSolicitudes;
     }
@@ -31,10 +31,37 @@ public class GestorBiblioteca {
     public AVLTree<Libro> getArbolLibros() {
         return arbolLibros;
     }
+
+    private void validarCodigo(int codigo) throws ExceptionIsEmpty {
+        if (codigo <= 0) {
+            throw new ExceptionIsEmpty("El código debe ser un número entero mayor a cero.");
+        }
+    }
+
+    private void validarAnio(int anio) throws ExceptionIsEmpty {
+
+        if (anio <= 0 || anio > 2026) {
+            throw new ExceptionIsEmpty("El año debe ser un valor válido (mayor a 0 y no en el futuro).");
+        }
+    }
+
+    private void validarTexto(String texto, String nombreCampo) throws ExceptionIsEmpty {
+        if (texto == null || texto.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El campo '" + nombreCampo + "' no puede estar vacío.");
+        }
+    }
+
     public void registrarLibro(int codigo, String titulo, String autor, String categoria, int anio, String estado)
-    throws ExceptionIsEmpty, ItemDuplicated {
-            Libro libro = new Libro(codigo, titulo, autor, categoria, anio, EstadoLibro.DISPONIBLE);
-    arbolLibros.insert(libro);
+            throws ExceptionIsEmpty, ItemDuplicated {
+        
+        validarCodigo(codigo);
+        validarTexto(titulo, "Título");
+        validarTexto(autor, "Autor");
+        validarTexto(categoria, "Categoría");
+        validarAnio(anio);
+
+        Libro libro = new Libro(codigo, titulo, autor, categoria, anio, EstadoLibro.DISPONIBLE);
+        arbolLibros.insert(libro);
     }  
     
     public List<Libro> mostrarTodosLosLibros() {
@@ -42,12 +69,17 @@ public class GestorBiblioteca {
     }
 
     public Libro buscarPorCodigo(int codigo) throws ItemNotfound, ExceptionIsEmpty {
+        validarCodigo(codigo); // Validación añadida
         Libro libroTemporal = new Libro(codigo, "Temp", "Temp", "Temp", 0, EstadoLibro.DISPONIBLE);
         return arbolLibros.search(libroTemporal);
     }
+
     public void modificarLibro(int codigo, String nuevoTitulo, String nuevoAutor, String nuevaCategoria, int nuevoAnio)
             throws ItemNotfound, ExceptionIsEmpty {
+        
+        validarCodigo(codigo);
         Libro libro = buscarPorCodigo(codigo);
+        
         if (nuevoTitulo != null && !nuevoTitulo.trim().isEmpty()) {
             libro.setTitulo(nuevoTitulo);
         }
@@ -58,15 +90,18 @@ public class GestorBiblioteca {
             libro.setCategoria(nuevaCategoria);
         }
         if (nuevoAnio > 0) {
+            validarAnio(nuevoAnio); // Validamos solo si intentan actualizarlo
             libro.setAnio(nuevoAnio);
         }
     }
-        public void eliminarLibro(int codigo) throws ItemNotfound, ExceptionIsEmpty {
-            Libro libro = buscarPorCodigo(codigo);
-            arbolLibros.delete(libro);
 
+    public void eliminarLibro(int codigo) throws ItemNotfound, ExceptionIsEmpty {
+        validarCodigo(codigo);
+        Libro libro = buscarPorCodigo(codigo);
+        arbolLibros.delete(libro);
     }
-        public List<Libro> mostrarLibrosDisponibles() {
+
+    public List<Libro> mostrarLibrosDisponibles() {
         List<Libro> resultado = new ArrayList<>();
         for (Libro libro : mostrarTodosLosLibros()) {
             if (libro.getEstado().equals(EstadoLibro.DISPONIBLE)) {
@@ -75,6 +110,7 @@ public class GestorBiblioteca {
         }
         return resultado;
     }
+
     public List<Libro> mostrarLibrosPrestados() {
         List<Libro> resultado = new ArrayList<>();
         for (Libro libro : mostrarTodosLosLibros()) {
@@ -84,34 +120,51 @@ public class GestorBiblioteca {
         }
         return resultado;
     }
-    public List<Libro> buscarPorTitulo(String titulo) {
+
+    public List<Libro> buscarPorTitulo(String titulo) throws ExceptionIsEmpty {
+        validarTexto(titulo, "Buscador Título");
         return buscador.buscarPorTitulo(mostrarTodosLosLibros(), titulo);
     }
-    public List<Libro> buscarPorAutor(String autor) {
+
+    public List<Libro> buscarPorAutor(String autor) throws ExceptionIsEmpty {
+        validarTexto(autor, "Buscador Autor");
         return buscador.buscarPorAutor(mostrarTodosLosLibros(), autor);
     }
-    public List<Libro> buscarPorCategoria(String categoria) {
-        return buscador.buscarPorCategoria(mostrarTodosLosLibros(), categoria);
 
+    public List<Libro> buscarPorCategoria(String categoria) throws ExceptionIsEmpty {
+        validarTexto(categoria, "Buscador Categoría");
+        return buscador.buscarPorCategoria(mostrarTodosLosLibros(), categoria);
     }
 
     public void registrarSolicitud(String codigoEstudiante, String nombreEstudiante, String codigoLibro, String fecha) throws ExceptionIsEmpty {
-    Solicitud solicitud = new Solicitud(codigoEstudiante, nombreEstudiante, codigoLibro, fecha);
-    colaSolicitudes.enqueue(solicitud);
+        validarTexto(codigoEstudiante, "Código Estudiante");
+        validarTexto(nombreEstudiante, "Nombre Estudiante");
+        validarTexto(codigoLibro, "Código de Libro");
+        validarTexto(fecha, "Fecha");
+
+        try {
+            int codigoNum = Integer.parseInt(codigoLibro);
+            validarCodigo(codigoNum);
+        } catch (NumberFormatException e) {
+            throw new ExceptionIsEmpty("El código del libro en la solicitud debe ser un número entero válido.");
+        }
+
+        Solicitud solicitud = new Solicitud(codigoEstudiante, nombreEstudiante, codigoLibro, fecha);
+        colaSolicitudes.enqueue(solicitud);
     }
 
-    public void mostrarColaSolicitudes() {
-        System.out.println(colaSolicitudes.mostrar());
+    public String mostrarColaSolicitudes() {
+        return colaSolicitudes.mostrar();
     }
 
-public Solicitud consultarSiguienteSolicitud() throws ExceptionIsEmpty {
+    public Solicitud consultarSiguienteSolicitud() throws ExceptionIsEmpty {
         if (colaSolicitudes.IsEmpty()) {
             return null;
         }
         return colaSolicitudes.peek();
     }
 
-public String procesarPrestamo() {
+    public String procesarPrestamo() {
         if (colaSolicitudes.IsEmpty()) {
             return "No hay solicitudes pendientes en la cola.";
         }
@@ -125,46 +178,45 @@ public String procesarPrestamo() {
 
             if (libroEncontrado.getEstado().equals(EstadoLibro.DISPONIBLE)) {
                 libroEncontrado.setEstado(EstadoLibro.PRESTADO);
-                System.out.println("Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + "' ha sido prestado a " + solicitudActual.getname_est());
-                return "Préstamo procesado con éxito.";
+                return "Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + "' ha sido prestado a " + solicitudActual.getname_est();
             } else {
-                System.out.println("El libro existe, pero actualmente no está disponible.");
-                return "El libro no está disponible.";
+                return "Error: El libro existe, pero actualmente se encuentra prestado.";
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: El código de libro en la solicitud tiene un formato incorrecto.");
-            return "Error de formato."; 
+            return "Error: El código de libro en la solicitud tiene un formato incorrecto."; 
         } catch (ExceptionIsEmpty e) {
-            System.out.println("Error al procesar los datos del libro: " + e.getMessage());
-            return "Error de datos vacíos.";
+            return "Error al procesar los datos: " + e.getMessage();
         } catch (ItemNotfound e) {
-
-            System.out.println("Error: El libro solicitado no está registrado.");
-            return "Libro no encontrado.";
+            return "Error: El libro solicitado no se encuentra registrado en el sistema.";
         }
     }
-    public void procesarDevolucion(int codigoLibro) {
-    try {
+
+    public String procesarDevolucion(int codigoLibro) {
+        try {
+            validarCodigo(codigoLibro);
+            
             Libro libroBuscado = new Libro(codigoLibro, "Temp", "Temp", "Temp", 0, EstadoLibro.PRESTADO);
             Libro libroEncontrado = arbolLibros.search(libroBuscado);
 
             if (libroEncontrado.getEstado().equals(EstadoLibro.PRESTADO)) {
                 libroEncontrado.setEstado(EstadoLibro.DISPONIBLE);
-                System.out.println("Devolución exitosa. El libro '" + libroEncontrado.getTitulo() + "' ahora está disponible.");
+                return "Devolución exitosa. El libro '" + libroEncontrado.getTitulo() + "' ahora está disponible.";
             } else {
-                System.out.println("El libro ya se encuentra disponible. No se puede devolver.");
+                return "Aviso: El libro ya se encontraba disponible. No se requiere devolución.";
             }
 
         } catch (ExceptionIsEmpty e) {
-            System.out.println("Error interno creando referencia de libro: " + e.getMessage());
+            return "Error de validación: " + e.getMessage();
         } catch (ItemNotfound e) {
-            System.out.println("Error: No se encontró ningún libro con el código " + codigoLibro);
+            return "Error: No se encontró ningún libro registrado con el código " + codigoLibro;
         }
     }
 
- public void mostrarReporteBasico() {
-        System.out.println("\n=== REPORTE BÁSICO DE BIBLIOTECA ===");
-        System.out.println("Solicitudes pendientes en cola: " + colaSolicitudes.size());
+    public String mostrarReporteBasico() {
+        StringBuilder reporte = new StringBuilder();
+        
+        reporte.append("=== REPORTE BÁSICO DE BIBLIOTECA ===\n");
+        reporte.append("Solicitudes pendientes en cola: ").append(colaSolicitudes.size()).append("\n");
 
         List<Libro> todosLosLibros = arbolLibros.obtenerListaLibros();
         int totales = 0, disponibles = 0, prestados = 0;
@@ -179,9 +231,11 @@ public String procesarPrestamo() {
                 }
             }
         }        
-        System.out.println("Total de libros registrados: " + totales);
-        System.out.println("Libros disponibles: " + disponibles);
-        System.out.println("Libros prestados: " + prestados);
-        System.out.println("====================================\n");
+        reporte.append("Total de libros registrados: ").append(totales).append("\n");
+        reporte.append("Libros disponibles: ").append(disponibles).append("\n");
+        reporte.append("Libros prestados: ").append(prestados).append("\n");
+        reporte.append("====================================");
+        
+        return reporte.toString();
     }
 }
