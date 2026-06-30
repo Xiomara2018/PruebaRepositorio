@@ -2,7 +2,7 @@ package modelos;
 
 import java.util.ArrayList;
 import java.util.List;
-import modelos.Libro;
+
 
 public class BuscadorLibros {
 
