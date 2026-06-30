@@ -1,8 +1,8 @@
 package vistas;
 
 import controladores.GestorBiblioteca;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 public class VentanaPrincipal extends JFrame
  {private GestorBiblioteca gestor;
 
@@ -60,8 +60,13 @@ btn12.addActionListener(e -> {
     }
 });
 
-btn1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Aquí abriremos la ventana para Registrar Libro"));
-}
+// Evento para abrir el formulario de registro de libros
+btn1.addActionListener(e -> {
+    // Creamos el diálogo pasándole 'this' (la ventana principal) y el 'gestor'
+    DialogoRegistrarLibro dialogo = new DialogoRegistrarLibro(this, gestor);
+    // Hacemos visible el formulario
+    dialogo.setVisible(true);
+});}
 
 public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
