@@ -2,8 +2,8 @@ package vistas;
 import controladores.GestorBiblioteca;
 import estructuras.ExceptionIsEmpty;
 import estructuras.ItemDuplicated;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class DialogoRegistrarLibro extends JDialog {
     private JTextField txtCodigo;
@@ -48,7 +48,7 @@ public class DialogoRegistrarLibro extends JDialog {
         panelBotones.add(btnCancelar);
         add(panelBotones, BorderLayout.SOUTH);
 
-        tnCancelar.addActionListener(e -> dispose());
+        btnCancelar.addActionListener(e -> dispose());
         btnGuardar.addActionListener(e -> {
             try{
                 int codigo = Integer.parseInt(txtCodigo.getText().trim());
@@ -56,5 +56,17 @@ public class DialogoRegistrarLibro extends JDialog {
                 String autor = txtAutor.getText().trim();
                 String categoria = txtCategoria.getText().trim();
                 int anio = Integer.parseInt(txtAnio.getText().trim());
+                String estado = "Disponible";
+                gestor.registrarLibro(codigo, titulo, autor, categoria, anio, estado);
+                JOptionPane.showMessageDialog(this, "¡Libro registrado con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "El código y el año deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+            } catch (ExceptionIsEmpty ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Datos Incompletos", JOptionPane.WARNING_MESSAGE);
+            } catch (ItemDuplicated ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Libro Duplicado", JOptionPane.ERROR_MESSAGE);
             }
+        });
+    }
 }
