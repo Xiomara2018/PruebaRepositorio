@@ -32,9 +32,11 @@ public class GestorBiblioteca {
             return "No hay solicitudes pendientes en la cola.";
         }
 
-        Solicitud solicitudActual = colaSolicitudes.dequeue();
+        Solicitud solicitudActual = null; 
         
         try {
+            solicitudActual = colaSolicitudes.dequeue();
+            
             int idLibro = Integer.parseInt(solicitudActual.getcode_libro());
             Libro libroBuscado = new Libro(idLibro, "Temp", "Temp", "Temp", 0, EstadoLibro.DISPONIBLE);
             Libro libroEncontrado = arbolLibros.search(libroBuscado);
@@ -49,7 +51,7 @@ public class GestorBiblioteca {
         } catch (NumberFormatException e) {
             return "Error: El código de libro en la solicitud tiene un formato incorrecto.";
         } catch (ExceptionIsEmpty e) {
-            return "Error al procesar los datos del libro: " + e.getMessage();
+            return "Error al procesar: " + e.getMessage();
         } catch (ItemNotfound e) {
             return "Error: El libro con código " + solicitudActual.getcode_libro() + " no está registrado.";
         }
