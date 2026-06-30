@@ -146,41 +146,32 @@ public class VentanaPrincipal extends JFrame {
             JOptionPane.showMessageDialog(this, resultado, "Atención de Solicitud", JOptionPane.INFORMATION_MESSAGE);
         });
 
-        btn10.addActionListener(e -> {
-            String input = JOptionPane.showInputDialog(this, 
-                "Ingrese el código del libro que desea devolver:", 
-                "Registrar Devolución", 
-                JOptionPane.QUESTION_MESSAGE);
+    btn10.addActionListener(e -> {
+        String input = JOptionPane.showInputDialog(this, 
+        "Ingrese el código del libro que desea devolver:", 
+        "Registrar Devolución", 
+        JOptionPane.QUESTION_MESSAGE);
                         
-            if (input != null && !input.trim().isEmpty()) {
-                try {
-                    int codigo = Integer.parseInt(input.trim());
-                    gestor.procesarDevolucion(codigo);
+        if (input != null && !input.trim().isEmpty()) {
+            try {
+            int codigo = Integer.parseInt(input.trim());
+                    
+            String mensajeDevolucion = gestor.procesarDevolucion(codigo);
                             
-                    JOptionPane.showMessageDialog(this, 
-                        "Se intentó procesar la devolución.\n(Revisa la consola de VS Code para ver si fue exitosa o si hubo error)", 
-                        "Proceso Terminado", 
-                        JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, mensajeDevolucion, "Resultado de Devolución", JOptionPane.INFORMATION_MESSAGE);
                                             
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        });
+});
 
-        btn11.addActionListener(e -> {
-            java.util.List<modelos.Libro> todosLosLibros = gestor.mostrarTodosLosLibros();
-            int totales = 0, disponibles = 0, prestados = 0;
-            if (todosLosLibros != null) {
-                totales = todosLosLibros.size();
-                for (modelos.Libro libro : todosLosLibros) {
-                    if (libro.getEstado().toString().equals("Disponible")) {
-                        disponibles++;
-                    } else {
-                        prestados++;
-                    }
-                }
-            }
+    btn11.addActionListener(e -> {
+
+    String textoReporte = gestor.mostrarReporteBasico();
+            
+    JOptionPane.showMessageDialog(this, textoReporte, "Reporte General", JOptionPane.INFORMATION_MESSAGE);
+        });
                         
             int solicitudes = gestor.getColaSolicitudes().size();
 
