@@ -83,7 +83,9 @@ public class GestorBiblioteca {
         }
         return resultado;
     }
-
+    public List<Libro> buscarPorTitulo(String titulo) {
+        return buscador.buscarPorTitulo(mostrarTodosLosLibros(), titulo);
+    }
 
 
 
