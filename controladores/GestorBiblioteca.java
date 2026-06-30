@@ -74,6 +74,15 @@ public class GestorBiblioteca {
         }
         return resultado;
     }
+    public List<Libro> mostrarLibrosPrestados() {
+        List<Libro> resultado = new ArrayList<>();
+        for (Libro libro : mostrarTodosLosLibros()) {
+            if (libro.getEstado().equals(EstadoLibro.PRESTADO)) {
+                resultado.add(libro);
+            }
+        }
+        return resultado;
+    }
 
 
 
