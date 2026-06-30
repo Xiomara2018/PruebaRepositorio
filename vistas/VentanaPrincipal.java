@@ -37,3 +37,15 @@ public VentanaPrincipal() {
     JButton btn11 = new JButton("11. Mostrar reporte");
     JButton btn12 = new JButton("12. Salir");
 
+    panelBotones.add(btn1);
+    panelBotones.add(btn7);
+    panelBotones.add(btn2);
+    panelBotones.add(btn8);
+    panelBotones.add(btn3);
+    panelBotones.add(btn9);
+    panelBotones.add(btn4);
+    panelBotones.add(btn10);
+    panelBotones.add(btn5);
+    panelBotones.add(btn11);
+    panelBotones.add(btn6);
+    panelBotones.add(btn12);
