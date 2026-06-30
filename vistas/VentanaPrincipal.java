@@ -85,6 +85,11 @@ btn8.addActionListener(e -> {
     
     JOptionPane.showMessageDialog(this, textoCola, "Cola de Espera", JOptionPane.INFORMATION_MESSAGE);
 });
+        btn9.addActionListener(e -> {
+            String resultado = gestor.procesarPrestamo();
+            
+            JOptionPane.showMessageDialog(this, resultado, "Atención de Solicitud", JOptionPane.INFORMATION_MESSAGE);
+        });
 }
 
 public static void main(String[] args) {
