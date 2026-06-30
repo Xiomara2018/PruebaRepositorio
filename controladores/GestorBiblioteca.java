@@ -33,9 +33,9 @@ public class GestorBiblioteca {
         return arbolLibros;
     }
     public void registrarLibro(int codigo, String titulo, String autor, String categoria, int anio, String estado)
-        throws ExceptionIsEmpty, ItemDuplicated {
-            Libro libro = new Libro(codigo, titulo, autor, categoria, anio, estado);
-        arbolLibros.insert(libro);
+    throws ExceptionIsEmpty, ItemDuplicated {
+            Libro libro = new Libro(codigo, titulo, autor, categoria, anio, EstadoLibro.DISPONIBLE);
+    arbolLibros.insert(libro);
     }  
     
     public List<Libro> mostrarTodosLosLibros() {
@@ -61,9 +61,11 @@ public class GestorBiblioteca {
         if (nuevoAnio > 0) {
             libro.setAnio(nuevoAnio);
         }
+    }
         public void eliminarLibro(int codigo) throws ItemNotfound, ExceptionIsEmpty {
             Libro libro = buscarPorCodigo(codigo);
             arbolLibros.delete(libro);
+
     }
         public List<Libro> mostrarLibrosDisponibles() {
         List<Libro> resultado = new ArrayList<>();
@@ -94,9 +96,9 @@ public class GestorBiblioteca {
 
     }
 
-    public void registrarSolicitud(String codigoEstudiante, String nombreEstudiante, String codigoLibro, String fecha) {
-        Solicitud solicitud = new Solicitud(codigoEstudiante, nombreEstudiante, codigoLibro, fecha);
-        colaSolicitudes.enqueque(solicitud);
+    public void registrarSolicitud(String codigoEstudiante, String nombreEstudiante, String codigoLibro, String fecha) throws ExceptionIsEmpty {
+    Solicitud solicitud = new Solicitud(codigoEstudiante, nombreEstudiante, codigoLibro, fecha);
+    colaSolicitudes.enqueue(solicitud);
     }
 
     public void mostrarColaSolicitudes() {
@@ -111,37 +113,40 @@ public class GestorBiblioteca {
     }
 
 
-    public String procesarPrestamo() {
+public String procesarPrestamo() {
         if (colaSolicitudes.IsEmpty()) {
             return "No hay solicitudes pendientes en la cola.";
-            return;
         }
-
-        Solicitud solicitudActual = colaSolicitudes.dequeue();
         
         try {
+            Solicitud solicitudActual = colaSolicitudes.dequeue();
+            
             int idLibro = Integer.parseInt(solicitudActual.getcode_libro());
             Libro libroBuscado = new Libro(idLibro, "Temp", "Temp", "Temp", 0, EstadoLibro.DISPONIBLE);
             Libro libroEncontrado = arbolLibros.search(libroBuscado);
 
             if (libroEncontrado.getEstado().equals(EstadoLibro.DISPONIBLE)) {
                 libroEncontrado.setEstado(EstadoLibro.PRESTADO);
-                System.out.println("Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + "' ha sido prestado a " + solicitudActual.getname_eString());
+                System.out.println("Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + "' ha sido prestado a " + solicitudActual.getname_est());
+                return "Préstamo procesado con éxito.";
             } else {
                 System.out.println("El libro existe, pero actualmente no está disponible.");
+                return "El libro no está disponible.";
             }
-
-       } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             System.out.println("Error: El código de libro en la solicitud tiene un formato incorrecto.");
+            return "Error de formato."; 
         } catch (ExceptionIsEmpty e) {
             System.out.println("Error al procesar los datos del libro: " + e.getMessage());
+            return "Error de datos vacíos.";
         } catch (ItemNotfound e) {
-            System.out.println("Error: El libro con código " + solicitudActual.getcode_libro() + " no está registrado.");
+
+            System.out.println("Error: El libro solicitado no está registrado.");
+            return "Libro no encontrado.";
         }
     }
-
-    public String procesarDevolucion(int codigoLibro) {
-        try {
+    public void procesarDevolucion(int codigoLibro) {
+    try {
             Libro libroBuscado = new Libro(codigoLibro, "Temp", "Temp", "Temp", 0, EstadoLibro.PRESTADO);
             Libro libroEncontrado = arbolLibros.search(libroBuscado);
 
