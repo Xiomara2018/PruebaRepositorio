@@ -102,7 +102,7 @@ public class GestorBiblioteca {
     }
 
     public void mostrarColaSolicitudes() {
-        colaSolicitudes.mostrar();
+        System.out.println(colaSolicitudes.mostrar());
     }
 
 public Solicitud consultarSiguienteSolicitud() throws ExceptionIsEmpty {
