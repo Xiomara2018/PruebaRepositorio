@@ -2,45 +2,28 @@ package modelos;
 
 public class EstadoLibro {
 
-    public static final String DISPONIBLE = "Disponible";
-    public static final String PRESTADO = "Prestado";
+    public static final EstadoLibro DISPONIBLE = new EstadoLibro("Disponible");
+    public static final EstadoLibro PRESTADO = new EstadoLibro("Prestado");
 
-    // Verifica si el estado es válido
-    public static boolean esValido(String estado) {
-        return normalizar(estado) != null;
+    private String estado;
+
+    // El constructor es privado para que nadie pueda hacer un 'new EstadoLibro("Robado")'
+    // Solo existen los dos estados definidos arriba.
+    private EstadoLibro(String estado) {
+        this.estado = estado;
     }
 
-    // Compara dos estados mayúsculas o espacios
-    public static boolean esIgual(String estado1, String estado2) {
-        String e1 = normalizar(estado1);
-        String e2 = normalizar(estado2);
+    // Este método devuelve el texto para cuando lo necesites en tu interfaz gráfica
+    @Override
+    public String toString() {
+        return this.estado;
+    }
 
-        if (e1 == null || e2 == null) {
+    // Compara si dos estados son exactamente el mismo objeto
+    public static boolean esIgual(EstadoLibro estado1, EstadoLibro estado2) {
+        if (estado1 == null || estado2 == null) {
             return false;
         }
-
-        return e1.equals(e2);
-    }
-
-    // Devuelve con el formato correcto
-    public static String normalizar(String estado) {
-        if (estado == null) {
-            return null;
-        }
-
-        estado = estado.trim();
-
-        if (estado.equalsIgnoreCase(DISPONIBLE)) {
-            return DISPONIBLE;
-        }
-
-        if (estado.equalsIgnoreCase(PRESTADO)) {
-            return PRESTADO;
-        }
-
-        return null;
-    }
-
-    private EstadoLibro() {
+        return estado1 == estado2;
     }
 }
