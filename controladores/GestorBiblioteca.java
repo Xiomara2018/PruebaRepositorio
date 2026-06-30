@@ -91,6 +91,23 @@ public class GestorBiblioteca {
     }
     public List<Libro> buscarPorCategoria(String categoria) {
         return buscador.buscarPorCategoria(mostrarTodosLosLibros(), categoria);
+
+    }
+    
+    public void registrarSolicitud(String codigoEstudiante, String nombreEstudiante, String codigoLibro, String fecha) {
+        Solicitud solicitud = new Solicitud(codigoEstudiante, nombreEstudiante, codigoLibro, fecha);
+        colaSolicitudes.enqueque(solicitud);
+    }
+
+    public void mostrarColaSolicitudes() {
+        colaSolicitudes.mostrar();
+    }
+
+    public Solicitud consultarSiguienteSolicitud() {
+        if (colaSolicitudes.IsEmpty()) {
+            return null;
+        }
+        return colaSolicitudes.peek();
     }
 
 
