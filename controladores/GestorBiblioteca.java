@@ -1,16 +1,16 @@
 package controladores;
 
-import estructuras.Cola;
 import estructuras.AVLTree;
-import estructuras.ItemNotfound;
-import estructuras.ItemDuplicated;
+import estructuras.Cola;
 import estructuras.ExceptionIsEmpty;
-import modelos.Libro;
-import modelos.Solicitud;
-import modelos.EstadoLibro;
-import modelos.BuscadorLibros;
+import estructuras.ItemDuplicated;
+import estructuras.ItemNotfound;
 import java.util.ArrayList;
 import java.util.List;
+import modelos.BuscadorLibros;
+import modelos.EstadoLibro;
+import modelos.Libro;
+import modelos.Solicitud;
 
 
 public class GestorBiblioteca {
@@ -105,13 +105,12 @@ public class GestorBiblioteca {
         colaSolicitudes.mostrar();
     }
 
-    public Solicitud consultarSiguienteSolicitud() {
+public Solicitud consultarSiguienteSolicitud() throws ExceptionIsEmpty {
         if (colaSolicitudes.IsEmpty()) {
             return null;
         }
         return colaSolicitudes.peek();
     }
-
 
 public String procesarPrestamo() {
         if (colaSolicitudes.IsEmpty()) {
