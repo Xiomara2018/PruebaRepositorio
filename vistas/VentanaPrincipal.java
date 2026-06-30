@@ -66,7 +66,12 @@ btn1.addActionListener(e -> {
     DialogoRegistrarLibro dialogo = new DialogoRegistrarLibro(this, gestor);
     // Hacemos visible el formulario
     dialogo.setVisible(true);
-});}
+});
+btn2.addActionListener(e -> {
+    DialogoMostrarLibros dialogo = new DialogoMostrarLibros(this, gestor);
+    dialogo.setVisible(true);
+});
+}
 
 public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
