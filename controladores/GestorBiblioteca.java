@@ -1,14 +1,16 @@
 package controladores;
 
-import estructuras.AVLTree;
 import estructuras.Cola;
-import estructuras.ExceptionIsEmpty;
+import estructuras.AVLTree;
 import estructuras.ItemNotfound;
-import java.util.List;
-import modelos.BuscadorLibros;
-import modelos.EstadoLibro;
+import estructuras.ItemDuplicated;
+import estructuras.ExceptionIsEmpty;
 import modelos.Libro;
 import modelos.Solicitud;
+import modelos.EstadoLibro;
+import modelos.BuscadorLibros;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GestorBiblioteca {
@@ -63,7 +65,14 @@ public class GestorBiblioteca {
             Libro libro = buscarPorCodigo(codigo);
             arbolLibros.delete(libro);
     }
-    
+        public List<Libro> mostrarLibrosDisponibles() {
+        List<Libro> resultado = new ArrayList<>();
+        for (Libro libro : mostrarTodosLosLibros()) {
+            if (libro.getEstado().equals(EstadoLibro.DISPONIBLE)) {
+                resultado.add(libro);
+            }
+        }
+        return resultado;
     }
 
 
