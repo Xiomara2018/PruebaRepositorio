@@ -1,12 +1,43 @@
 package modelos;
 
+import estructuras.ExceptionIsEmpty;
+
 public class Solicitud {
     private String codigo_est;
     private String name_est;
     private String code_libro;
     private String fecha_soli;
 
-    public Solicitud(String codigo_est, String name_est, String code_libro, String fecha_soli){
+    public Solicitud(String codigo_est, String name_est, String code_libro, String fecha_soli) throws ExceptionIsEmpty {
+        
+        if (codigo_est == null) {
+            throw new ExceptionIsEmpty("El código del estudiante no puede estar vacío");
+        }
+        if (codigo_est.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El código del estudiante no puede estar vacío");
+        }
+        
+        if (name_est == null) {
+            throw new ExceptionIsEmpty("El nombre del estudiante no puede estar vacío");
+        }
+        if (name_est.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El nombre del estudiante no puede estar vacío");
+        }
+        
+        if (code_libro == null) {
+            throw new ExceptionIsEmpty("El código del libro no puede estar vacío");
+        }
+        if (code_libro.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("El código del libro no puede estar vacío");
+        }
+        
+        if (fecha_soli == null) {
+            throw new ExceptionIsEmpty("La fecha de solicitud no puede estar vacía");
+        }
+        if (fecha_soli.trim().isEmpty()) {
+            throw new ExceptionIsEmpty("La fecha de solicitud no puede estar vacía");
+        }
+
         this.codigo_est = codigo_est;
         this.name_est = name_est;
         this.code_libro = code_libro;
