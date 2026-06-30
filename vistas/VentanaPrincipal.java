@@ -54,14 +54,6 @@ public class VentanaPrincipal extends JFrame {
         add(panelBotones, BorderLayout.CENTER);
 
 
-        btn12.addActionListener(e -> {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION);
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
-
-
         btn1.addActionListener(e -> {
             DialogoRegistrarLibro dialogo = new DialogoRegistrarLibro(this, gestor);
             dialogo.setVisible(true);
@@ -76,7 +68,42 @@ public class VentanaPrincipal extends JFrame {
             DialogoBuscarLibro dialogo = new DialogoBuscarLibro(this, gestor);
             dialogo.setVisible(true);
         });
+        btn4.addActionListener(e -> {
+            String categoria = JOptionPane.showInputDialog(this, 
+                    "Ingrese la categoría que desea buscar:", 
+                    "Buscar por Categoría", 
+                    JOptionPane.QUESTION_MESSAGE);
 
+            if (categoria != null && !categoria.trim().isEmpty()) {
+
+                java.util.List<modelos.Libro> encontrados = gestor.buscarPorCategoria(categoria.trim());
+                
+                if (encontrados.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(this, 
+                            "No se encontraron libros en la categoría: " + categoria, 
+                            "Sin resultados", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+
+                    StringBuilder textoResultados = new StringBuilder();
+                    textoResultados.append("Libros encontrados en la categoría '").append(categoria).append("':\n\n");
+                    
+                    for (modelos.Libro libro : encontrados) {
+                        textoResultados.append("- [").append(libro.getCodigo()).append("] ")
+                                       .append(libro.getTitulo()).append(" (")
+                                       .append(libro.getEstado().toString()).append(")\n");
+                    }
+                    
+                    JTextArea areaTexto = new JTextArea(textoResultados.toString());
+                    areaTexto.setEditable(false);
+                    JScrollPane scroll = new JScrollPane(areaTexto);
+                    scroll.setPreferredSize(new java.awt.Dimension(350, 200));
+                    
+                    JOptionPane.showMessageDialog(this, scroll, "Resultados de Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
 
         btn5.addActionListener(e -> {
             DialogoModificarLibro dialogo = new DialogoModificarLibro(this, gestor);
@@ -168,8 +195,15 @@ public class VentanaPrincipal extends JFrame {
                                                 
             JOptionPane.showMessageDialog(this, textoReporte, "Reporte General", JOptionPane.INFORMATION_MESSAGE);
         });
+    btn12.addActionListener(e -> {
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION);
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        System.exit(0);
+        }
+});
 
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
