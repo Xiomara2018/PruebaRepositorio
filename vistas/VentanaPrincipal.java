@@ -18,7 +18,7 @@ public class VentanaPrincipal extends JFrame {
 
         JLabel lblTitulo = new JLabel("SISTEMA DE GESTIÓN QUICKLIBRARY", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 18));
-        lblTitulo.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0)); // Márgenes
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0)); 
         add(lblTitulo, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel();
@@ -54,6 +54,7 @@ public class VentanaPrincipal extends JFrame {
         add(panelBotones, BorderLayout.CENTER);
 
 
+
         btn1.addActionListener(e -> {
             DialogoRegistrarLibro dialogo = new DialogoRegistrarLibro(this, gestor);
             dialogo.setVisible(true);
@@ -68,6 +69,7 @@ public class VentanaPrincipal extends JFrame {
             DialogoBuscarLibro dialogo = new DialogoBuscarLibro(this, gestor);
             dialogo.setVisible(true);
         });
+
         btn4.addActionListener(e -> {
             String categoria = JOptionPane.showInputDialog(this, 
                     "Ingrese la categoría que desea buscar:", 
@@ -75,17 +77,14 @@ public class VentanaPrincipal extends JFrame {
                     JOptionPane.QUESTION_MESSAGE);
 
             if (categoria != null && !categoria.trim().isEmpty()) {
-
                 java.util.List<modelos.Libro> encontrados = gestor.buscarPorCategoria(categoria.trim());
                 
                 if (encontrados.isEmpty()) {
-
                     JOptionPane.showMessageDialog(this, 
                             "No se encontraron libros en la categoría: " + categoria, 
                             "Sin resultados", 
                             JOptionPane.INFORMATION_MESSAGE);
                 } else {
-
                     StringBuilder textoResultados = new StringBuilder();
                     textoResultados.append("Libros encontrados en la categoría '").append(categoria).append("':\n\n");
                     
@@ -146,55 +145,36 @@ public class VentanaPrincipal extends JFrame {
             JOptionPane.showMessageDialog(this, resultado, "Atención de Solicitud", JOptionPane.INFORMATION_MESSAGE);
         });
 
-    btn10.addActionListener(e -> {
-        String input = JOptionPane.showInputDialog(this, 
-        "Ingrese el código del libro que desea devolver:", 
-        "Registrar Devolución", 
-        JOptionPane.QUESTION_MESSAGE);
-                        
-        if (input != null && !input.trim().isEmpty()) {
-            try {
-            int codigo = Integer.parseInt(input.trim());
-                    
-            String mensajeDevolucion = gestor.procesarDevolucion(codigo);
-                            
-            JOptionPane.showMessageDialog(this, mensajeDevolucion, "Resultado de Devolución", JOptionPane.INFORMATION_MESSAGE);
-                                            
-            } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        btn10.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(this, 
+                "Ingrese el código del libro que desea devolver:", 
+                "Registrar Devolución", 
+                JOptionPane.QUESTION_MESSAGE);
+                                        
+            if (input != null && !input.trim().isEmpty()) {
+                try {
+                    int codigo = Integer.parseInt(input.trim());
+                    String mensajeDevolucion = gestor.procesarDevolucion(codigo);
+                    JOptionPane.showMessageDialog(this, mensajeDevolucion, "Resultado de Devolución", JOptionPane.INFORMATION_MESSAGE);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
-});
-
-    btn11.addActionListener(e -> {
-
-    String textoReporte = gestor.mostrarReporteBasico();
-            
-    JOptionPane.showMessageDialog(this, textoReporte, "Reporte General", JOptionPane.INFORMATION_MESSAGE);
         });
-                        
-            int solicitudes = gestor.getColaSolicitudes().size();
 
-            String textoReporte = """
-                                  === REPORTE B\u00c1SICO DE BIBLIOTECA ===
-                                  
-                                  Total de libros registrados: """ + totales + "\n"
-                + "Libros disponibles: " + disponibles + "\n"
-                + "Libros prestados: " + prestados + "\n"
-                + "Solicitudes pendientes en cola: " + solicitudes + "\n\n"
-                + "====================================";
-                                                
+        btn11.addActionListener(e -> {
+            String textoReporte = gestor.mostrarReporteBasico();
             JOptionPane.showMessageDialog(this, textoReporte, "Reporte General", JOptionPane.INFORMATION_MESSAGE);
         });
-    btn12.addActionListener(e -> {
-    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION);
-    if (confirmacion == JOptionPane.YES_OPTION) {
-        System.exit(0);
-        }
-});
+        
+        btn12.addActionListener(e -> {
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Seguro que desea salir?", "Salir", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
 
     }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -202,4 +182,4 @@ public class VentanaPrincipal extends JFrame {
             ventana.setVisible(true);
         });
     }
-} 
+}
