@@ -13,28 +13,16 @@ public class Solicitud {
         if (codigo_est == null) {
             throw new ExceptionIsEmpty("El código del estudiante no puede estar vacío");
         }
-        if (codigo_est.trim().isEmpty()) {
-            throw new ExceptionIsEmpty("El código del estudiante no puede estar vacío");
-        }
         
         if (name_est == null) {
             throw new ExceptionIsEmpty("El nombre del estudiante no puede estar vacío");
         }
-        if (name_est.trim().isEmpty()) {
-            throw new ExceptionIsEmpty("El nombre del estudiante no puede estar vacío");
-        }
-        
+
         if (code_libro == null) {
-            throw new ExceptionIsEmpty("El código del libro no puede estar vacío");
-        }
-        if (code_libro.trim().isEmpty()) {
             throw new ExceptionIsEmpty("El código del libro no puede estar vacío");
         }
         
         if (fecha_soli == null) {
-            throw new ExceptionIsEmpty("La fecha de solicitud no puede estar vacía");
-        }
-        if (fecha_soli.trim().isEmpty()) {
             throw new ExceptionIsEmpty("La fecha de solicitud no puede estar vacía");
         }
 
@@ -48,7 +36,7 @@ public class Solicitud {
     public String getcodigo_est(){return this.codigo_est;}
 
     public void setname_est(String name_est){this.name_est = name_est;}
-    public String getname_eString(){return this.name_est;}
+    public String getname_est(){return this.name_est;}
 
     public void setcode_libro(String code_libro){this.code_libro = code_libro;}
     public String getcode_libro(){return this.code_libro;}
