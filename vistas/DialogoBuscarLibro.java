@@ -21,8 +21,13 @@ public DialogoBuscarLibro(JFrame ventanaPadre, GestorBiblioteca gestor) {
     JButton btnBuscar = new JButton("Buscar");
     panelBusqueda.add(btnBuscar);
     add(panelBusqueda, BorderLayout.NORTH);
-    xtResultado = new JTextArea();
-        txtResultado.setEditable(false); 
-        txtResultado.setFont(new Font("Monospaced", Font.PLAIN, 14));
-        txtResultado.setBorder(BorderFactory.createTitledBorder("Resultado de la Búsqueda"));
+    txtResultado = new JTextArea();
+    txtResultado.setEditable(false); 
+    txtResultado.setFont(new Font("Monospaced", Font.PLAIN, 14));
+    txtResultado.setBorder(BorderFactory.createTitledBorder("Resultado de la Búsqueda"));
+    add(new JScrollPane(txtResultado), BorderLayout.CENTER);
+    JPanel panelInferior = new JPanel();
+    JButton btnCerrar = new JButton("Cerrar");
+    btnCerrar.addActionListener(e -> dispose());
+    panelInferior.add(btnCerrar);
 }
