@@ -1,13 +1,13 @@
 package controladores;
 
-import estructuras.Cola;
 import estructuras.AVLTree;
-import estructuras.ItemNotfound;
+import estructuras.Cola;
 import estructuras.ExceptionIsEmpty;
+import estructuras.ItemNotfound;
+import java.util.List;
+import modelos.EstadoLibro;
 import modelos.Libro;
 import modelos.Solicitud;
-import modelos.EstadoLibro;
-import java.util.List;
 
 public class GestorBiblioteca {
 
@@ -41,8 +41,7 @@ public class GestorBiblioteca {
 
             if (libroEncontrado.getEstado().equals(EstadoLibro.DISPONIBLE)) {
                 libroEncontrado.setEstado(EstadoLibro.PRESTADO);
-                return "Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + 
-                       "' ha sido prestado a " + solicitudActual.getname_eString();
+                return "Préstamo exitoso: El libro '" + libroEncontrado.getTitulo() + "' ha sido prestado a " + solicitudActual.getname_eString();
             } else {
                 return "El libro existe, pero actualmente no está disponible.";
             }
@@ -80,7 +79,7 @@ public class GestorBiblioteca {
         reporte.append("\n=== REPORTE BÁSICO DE BIBLIOTECA ===\n");
         reporte.append("Solicitudes pendientes en cola: ").append(colaSolicitudes.size()).append("\n");
 
-        List<Libro> todosLosLibros = arbolLibros.inorden(); 
+        List<Libro> todosLosLibros = arbolLibros.obtenerListaLibros(); 
         int totales = 0, disponibles = 0, prestados = 0;
         
         if (todosLosLibros != null) {
