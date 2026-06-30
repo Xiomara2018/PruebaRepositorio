@@ -74,7 +74,32 @@ btn2.addActionListener(e -> {
 btn3.addActionListener(e -> {
     DialogoBuscarLibro dialogo = new DialogoBuscarLibro(this, gestor);
     dialogo.setVisible(true);
+
+btn5.addActionListener(e -> {
+    dialogoModificarLibro dialogo = new DialogoModificarLibro(this, gestor);
+    dialogo.setVisible(true);
 });
+
+btn6.addActionListener(e -> {
+    String input = JOptionPane.showInputDialog(this, 
+    "Ingrese el código del libro a eliminar:", 
+    "Eliminar Libro", 
+    JOptionPane.WARNING_MESSAGE);
+            
+    if (input != null && !input.trim().isEmpty()) {
+        try {
+        int codigo = Integer.parseInt(input.trim());
+            gestor.eliminarLibro(codigo);
+            JOptionPane.showMessageDialog(this, "Libro eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El código debe ser un número.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (estructuras.ItemNotfound ex) { // Asegúrate de tener importado ItemNotfound
+            JOptionPane.showMessageDialog(this, "No se encontró ningún libro con ese código.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (estructuras.ExceptionIsEmpty ex) {
+            JOptionPane.showMessageDialog(this, "Error interno con los datos.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
 btn7.addActionListener(e -> {
     DialogoRegistrarSolicitud dialogo = new DialogoRegistrarSolicitud(this, gestor);
@@ -92,27 +117,53 @@ btn9.addActionListener(e -> {
 });
 
 btn10.addActionListener(e -> {
-            String input = JOptionPane.showInputDialog(this, 
-                    "Ingrese el código del libro que desea devolver:", 
-                    "Registrar Devolución", 
-                    JOptionPane.QUESTION_MESSAGE);
+    String input = JOptionPane.showInputDialog(this, 
+        "Ingrese el código del libro que desea devolver:", 
+        "Registrar Devolución", 
+        JOptionPane.QUESTION_MESSAGE);
             
-            if (input != null && !input.trim().isEmpty()) {
-                try {
-                    int codigo = Integer.parseInt(input.trim());
+    if (input != null && !input.trim().isEmpty()) {
+        try {
+            int codigo = Integer.parseInt(input.trim());
 
-                    gestor.procesarDevolucion(codigo);
+            gestor.procesarDevolucion(codigo);
                     
-                    JOptionPane.showMessageDialog(this, 
-                            "Se intentó procesar la devolución.\n(Revisa la consola de VS Code para ver si fue exitosa o si hubo error)", 
-                            "Proceso Terminado", 
-                            JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+            "Se intentó procesar la devolución.\n(Revisa la consola de VS Code para ver si fue exitosa o si hubo error)", 
+            "Proceso Terminado", 
+            JOptionPane.INFORMATION_MESSAGE);
                             
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+        } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "El código debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+    }
+});
+btn11.addActionListener(e -> {
+    java.ava.util.List<modelos.Libro> todosLosLibros = gestor.mostrarTodosLosLibros();
+    int totales = 0, disponibles = 0, prestados = 0;
+    if (todosLosLibros != null) {
+        totales = todosLosLibros.size();
+        for (modelos.Libro libro : todosLosLibros) {
+            if (libro.getEstado().toString().equals("Disponible")) {
+                disponibles++;
+    } else {
+    prestados++;
             }
+        }
+    }
+            
+    int solicitudes = gestor.getColaSolicitudes().size();
+
+    String textoReporte = "=== REPORTE BÁSICO DE BIBLIOTECA ===\n\n"
+        + "Total de libros registrados: " + totales + "\n"
+        + "Libros disponibles: " + disponibles + "\n"
+        + "Libros prestados: " + prestados + "\n"
+        + "Solicitudes pendientes en cola: " + solicitudes + "\n\n"
+        + "====================================";
+                                
+    JOptionPane.showMessageDialog(this, textoReporte, "Reporte General", JOptionPane.INFORMATION_MESSAGE);
         });
+
 }
 
 public static void main(String[] args) {
