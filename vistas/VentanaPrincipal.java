@@ -70,40 +70,44 @@ public class VentanaPrincipal extends JFrame {
             dialogo.setVisible(true);
         });
 
-        btn4.addActionListener(e -> {
-            String categoria = JOptionPane.showInputDialog(this, 
-                    "Ingrese la categoría que desea buscar:", 
-                    "Buscar por Categoría", 
-                    JOptionPane.QUESTION_MESSAGE);
+     btn4.addActionListener(e -> {
+        String categoria = JOptionPane.showInputDialog(this, 
+        "Ingrese la categoría que desea buscar:", 
+        "Buscar por Categoría", 
+        JOptionPane.QUESTION_MESSAGE);
 
-            if (categoria != null && !categoria.trim().isEmpty()) {
+        if (categoria != null && !categoria.trim().isEmpty()) {
+            try {
                 java.util.List<modelos.Libro> encontrados = gestor.buscarPorCategoria(categoria.trim());
-                
+                    
                 if (encontrados.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, 
-                            "No se encontraron libros en la categoría: " + categoria, 
-                            "Sin resultados", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, 
+                 "No se encontraron libros en la categoría: " + categoria, 
+                 "Sin resultados", 
+                JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     StringBuilder textoResultados = new StringBuilder();
                     textoResultados.append("Libros encontrados en la categoría '").append(categoria).append("':\n\n");
-                    
+                        
                     for (modelos.Libro libro : encontrados) {
-                        textoResultados.append("- [").append(libro.getCodigo()).append("] ")
-                                       .append(libro.getTitulo()).append(" (")
-                                       .append(libro.getEstado().toString()).append(")\n");
-                    }
-                    
+                    textoResultados.append("- [").append(libro.getCodigo()).append("] ")
+                    .append(libro.getTitulo()).append(" (")
+                    .append(libro.getEstado().toString()).append(")\n");
+                        }
+                        
                     JTextArea areaTexto = new JTextArea(textoResultados.toString());
                     areaTexto.setEditable(false);
                     JScrollPane scroll = new JScrollPane(areaTexto);
                     scroll.setPreferredSize(new java.awt.Dimension(350, 200));
-                    
+                        
                     JOptionPane.showMessageDialog(this, scroll, "Resultados de Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                } catch (estructuras.ExceptionIsEmpty ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
-
         btn5.addActionListener(e -> {
             DialogoModificarLibro dialogo = new DialogoModificarLibro(this, gestor);
             dialogo.setVisible(true);
