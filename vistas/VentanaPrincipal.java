@@ -23,9 +23,10 @@ public class VentanaPrincipal extends JFrame {
         add(lblTitulo, BorderLayout.NORTH);
 
         JPanel panelBotones = new JPanel();
+        //Se construye un panel de botones
         panelBotones.setLayout(new GridLayout(7, 2, 10, 10));
         panelBotones.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-
+        //Se crean 14 botones
         JButton btn1 = new JButton("1. Registrar libro");
         JButton btn2 = new JButton("2. Mostrar libros");
         JButton btn3 = new JButton("3. Buscar libro por código");
@@ -41,7 +42,7 @@ public class VentanaPrincipal extends JFrame {
         JButton btn13 = new JButton("13. Cargar desde CSV");
         JButton btn14 = new JButton(""); // Relleno invisible para mantener la cuadrícula
         btn14.setVisible(false);
-
+        //Agregamos los botones
         panelBotones.add(btn1);
         panelBotones.add(btn7);
         panelBotones.add(btn2);
@@ -59,7 +60,7 @@ public class VentanaPrincipal extends JFrame {
 
         add(panelBotones, BorderLayout.CENTER);
 
-
+// Cada boton recibe un ActionListener
 
         btn1.addActionListener(e -> {
             DialogoRegistrarLibro dialogo = new DialogoRegistrarLibro(this, gestor);
